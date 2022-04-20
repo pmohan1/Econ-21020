@@ -1,0 +1,28 @@
+df <- read.csv("ak91.csv")
+
+yrs_educ <- df$YRS_EDUC
+wkly_wage <- df$WKLY_WAGE
+has_college_degree <- yrs_educ == 16
+
+px = (1/329509) * sum(has_college_degree)
+px
+[1] 0.1084857
+
+mu_college = ((1/329509) * sum(has_college_degree * wkly_wage)) / px
+mu_college
+[1] 594.4866
+
+var_college1 =  ((1/329509) * sum(has_college_degree * (wkly_wage^2))) / px
+var_college2 = (((1/329509) * sum(has_college_degree * wkly_wage)) / px)^2
+var_college = var_college1 - var_college2
+se_college = sqrt(var_college / px) * ((1/sqrt(329509)))
+se_college
+[1] 2.268982
+
+lower_interval = mu_college - (1.96*se_college)
+upper_interval = mu_college + (1.96*se_college)
+
+> lower_interval
+[1] 590.0394
+> upper_interval
+[1] 598.9338
