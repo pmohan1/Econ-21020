@@ -1,0 +1,31 @@
+>df<-read.csv("ak91.csv")
+n <- nrow(df)
+
+yrs_educ <- df$YRS_EDUC
+wkly_wage <- df$WKLY_WAGE
+
+beta<-cov(wkly_wage, yrs_educ) / var(yrs_educ)
+beta
+[1] 29.6224
+
+alpha <-mean(wkly_wage) - mean(yrs_educ) * beta
+alpha
+[1] 61.19537
+
+blp_yx <-alpha + yrs_educ * beta
+
+epsilon <- wkly_wage - blp_yx
+se_numer <-sqrt(mean(epsilon^2 * (yrs_educ - mean(yrs_educ))^2))
+se<-(se_numer / var(yrs_educ)) /sqrt(n)
+se
+[1] 0.2101695
+
+alpha + 16 * beta
+[1] 535.1538
+
+test <- abs((beta - 31) / se)
+test
+[1] 6.554693
+
+2*(1-pnorm(test))
+[1] 5.575651e-11
