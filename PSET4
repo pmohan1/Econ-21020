@@ -1,0 +1,31 @@
+bw06 <- read_csv("Documents/STAT234/bw06.csv")
+dat <- as.matrix(bw06)
+
+y <- dat[, "birthweight"]
+w <- dat[, "cigsdaily"]
+x <- cbind(1, dat[, c("boy", "age", "highschool","somecollege", "college")])
+x_tld <- dat[, "married"]
+
+beta<-cov(w, y) / var(w)
+beta
+[1] -12.77238
+
+alpha <-mean(y) - mean(w) * beta
+alpha
+[1] 3286.827
+
+XX_inv <- solve(t(x) %*% x)
+XY <- t(x) %*% y
+beta_y <- XX_inv %*% XY
+blp_yx <- x %*% beta_y
+
+XW <- t(x) %*% w
+beta_w <- XX_inv %*% XW
+blp_wx <- x %*% beta_w
+
+y_adj <- y - blp_yx
+w_adj <- w - blp_wx
+b_w <- cov(w_adj, y_adj) / var(w_adj)
+b_w
+          [,1]
+[1,] -11.06251
